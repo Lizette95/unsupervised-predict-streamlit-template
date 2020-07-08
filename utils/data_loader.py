@@ -26,5 +26,5 @@ def load_movie_titles(path_to_movies):
     """
     df = pd.read_csv(path_to_movies)
     df = df.dropna()
-    movie_list = df['title'].to_list()
+    movie_list = list(df['title'])
     return movie_list
