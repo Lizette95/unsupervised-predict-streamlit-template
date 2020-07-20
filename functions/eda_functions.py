@@ -20,6 +20,11 @@ init_notebook_mode(connected=True)
 sns.set(font_scale=1)
 sns.set_style("white")
 
+# Load data
+train_df = pd.read_csv('../../Unsupervised_learning/edsa-recommender-system-predict/train.csv')
+movies_df = pd.read_csv('../../Unsupervised_learning/edsa-recommender-system-predict/movies.csv')
+imdb_df = pd.read_csv('../../Unsupervised_learning/edsa-recommender-system-predict/imdb_data.csv')
+
 # Functions
 # Ratings
 def user_ratings_count(df, n): # N can be played with and  included as an app?
@@ -93,10 +98,10 @@ def plot_ratings(count, n, color='blue', best=True, method='mean'):
     # What are the best and worst movies
     # Creating a new DF with mean and count
     if method == 'mean':
-        movie_avg_ratings = pd.DataFrame(eda_df.join(movies_df, on='movieId', how='left').groupby(['movieId', 'title'])['rating'].mean())
+        movie_avg_ratings = pd.DataFrame(train_df.join(movies_df, on='movieId', how='left').groupby(['movieId', 'title'])['rating'].mean())
     else:
-        movie_avg_ratings = pd.DataFrame(eda_df.join(movies_df, on='movieId', how='left').groupby(['movieId', 'title'])['rating'].median())
-    movie_avg_ratings['count'] = eda_df.groupby('movieId')['userId'].count().values
+        movie_avg_ratings = pd.DataFrame(train_df.join(movies_df, on='movieId', how='left').groupby(['movieId', 'title'])['rating'].median())
+    movie_avg_ratings['count'] = train_df.groupby('movieId')['userId'].count().values
     movie_avg_ratings.reset_index(inplace=True)
     movie_avg_ratings.set_index('movieId', inplace=True)
 
@@ -210,7 +215,7 @@ def feature_count(df, column):
     plt.xlabel('Count')
     plt.show()
 
-def mean_calc(feat_df, ratings = eda_df, movies = movies_df, metadata = imdb_df, column = 'genres'):
+def mean_calc(feat_df, ratings = train_df, movies = movies_df, metadata = imdb_df, column = 'genres'):
     """
     Function that calculates the mean ratings of a feature
     Parameters
@@ -294,7 +299,7 @@ def dir_mean(df):
     df.set_index('director', inplace=True)
 
     direct_ratings = []
-    directors_eda = eda_df.join(imdb_df, on = 'movieId', how = 'left')
+    directors_eda = train_df.join(imdb_df, on = 'movieId', how = 'left')
     for director in df.index:
         rating = round(directors_eda[directors_eda['director']==director]['rating'].mean(),2)
         direct_ratings.append(rating)
