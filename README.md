@@ -7,10 +7,10 @@ This library was created to learn how to build recommender systems and inplement
 `python setup.py sdist`
 
 ## installing this package from GitHub
-`pip install git+https://github.com/Lizette95/unsupervised-predict-streamlit-template`
+`pip install git+https://github.com/Lizette95/unsupervised-predict-streamlit-template.git`
 
-##updating this package from GitHub
-`pip install --upgrade git+https://github.com/Lizette95/unsupervised-predict-streamlit-template`
+## updating this package from GitHub
+`pip install --upgrade git+https://github.com/Lizette95/unsupervised-predict-streamlit-template.git`
 
 ## 1) Overview
 
