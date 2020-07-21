@@ -1,5 +1,5 @@
-from . import eda_functions as eda
-from . import model_functions as model
+from utils import eda_functions as eda
+from utils import model_functions as model
 import pandas as pd
 
 def test_eda_functions():

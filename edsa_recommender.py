@@ -37,15 +37,18 @@ from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
 
+path_to_s3 = ('../unsupervised_data/')
+
 # Data Loading
-title_list = load_movie_titles('resources/data/movies.csv')
+title_list = load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
+
 
 # App declaration
 def main():
 
     # DO NOT REMOVE the 'Recommender System' option below, however,
     # you are welcome to add more options to enrich your app.
-    page_options = ["Recommender System","Solution Overview"]
+    page_options = ["Introduction", "Directors Profiles","Recommender System","Solution Overview"]
 
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
@@ -62,6 +65,7 @@ def main():
                         'Collaborative Based Filtering'))
 
         # User-based preferences
+        # movie_list = pd.merge(train_df, title_list, on = 'movieId', how ='left').groupby('title')['ratings'].mean()
         st.write('### Enter Your Three Favorite Movies')
         movie_1 = st.selectbox('Fisrt Option',title_list[14930:15200])
         movie_2 = st.selectbox('Second Option',title_list[25055:25255])
