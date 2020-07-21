@@ -21,9 +21,9 @@ sns.set(font_scale=1)
 sns.set_style("white")
 
 # Load data
-train_df = pd.read_csv('../../Unsupervised_learning/edsa-recommender-system-predict/train.csv')
-movies_df = pd.read_csv('../../Unsupervised_learning/edsa-recommender-system-predict/movies.csv')
-imdb_df = pd.read_csv('../../Unsupervised_learning/edsa-recommender-system-predict/imdb_data.csv')
+train_df = pd.read_csv('../unsupervised_data/unsupervised_movie_data/train.csv')
+movies_df = pd.read_csv('../unsupervised_data/unsupervised_movie_data/movies.csv')
+imdb_df = pd.read_csv('../unsupervised_data/unsupervised_movie_data/imdb_data.csv')
 
 # Functions
 # Ratings
