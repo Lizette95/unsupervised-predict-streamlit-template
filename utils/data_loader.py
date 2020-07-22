@@ -29,7 +29,7 @@ def load_movie_titles(path_to_movies):
     movie_list = list(df['title'])
     return movie_list
 
-def load_train(path_to_train):
+def load_dataframe(path_to_csv, index):
     """Load train data from database records.
 
     Parameters
@@ -44,4 +44,4 @@ def load_train(path_to_train):
         User Interactions dataframe.
 
     """
-    return pd.read_csv(path_to_train)
+    return pd.read_csv(path_to_csv,index_col=index)

@@ -32,23 +32,28 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+# Data Visulization
+import matplotlib.pyplot as plt
+
 # Custom Libraries
-from utils.data_loader import load_movie_titles
+from utils import data_loader as dl
+from eda import eda_functions as eda
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
 
 path_to_s3 = ('../unsupervised_data/')
 
 # Data Loading
-title_list = load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
-
+title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
+train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
+movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
 
 # App declaration
 def main():
 
     # DO NOT REMOVE the 'Recommender System' option below, however,
     # you are welcome to add more options to enrich your app.
-    page_options = ["Introduction", "Directors Profiles","Recommender System","Solution Overview"]
+    page_options = ["Introduction", "Exploratory Data Analysis", "Directors Profiles", "Recommender System", "Solution Overview"]
 
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
@@ -99,14 +104,68 @@ def main():
                 except:
                     st.error("Oops! Looks like this algorithm does't work.\
                               We'll need to fix it!")
-
-
     # -------------------------------------------------------------------
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
     if page_selection == "Solution Overview":
         st.title("Solution Overview")
         st.write("Describe your winning approach on this page")
+    # ------------- EDA -------------------------------------------
+    if page_selection == "Exploratory Data Analysis":
+        st.title("Exploratory Data Analysis")
+        # st.write("Observations from the Data Exploration")
+        # Declare subpages
+        page_options_eda = ["User Interactions", "Movies", "Directors", "Cast", "Plot Keywords"]
+        page_selection_eda = st.selectbox("Choose Area of Exploration", page_options_eda)
+        if page_selection_eda == "User Interactions":
+        # Most Active
+            st.subheader("Most Active Users")
+            top_user = st.checkbox('Include top user?',value=False)
+            ## include top user
+            if top_user == True:
+                ratings = train_df
+            else:
+                ratings = train_df[train_df['userId']!=72315]
+            ## choose top k
+            n = st.number_input('Enter number of users (1-20)',min_value=5, max_value=50, step = 5, value=10)
+            ratings_plot = eda.user_ratings_count(ratings, n)
+            st.pyplot()
+            st.write('write something about top users')
+        # Ratings Distribution
+            st.subheader('Ratings Distribution')
+            eda.number_users_per_rating(ratings)
+            st.pyplot()
+            st.write('write something about ratings ditribution')
+
+        # Rating v number of ratings
+            st.subheader('Ratings trends')
+            eda.mean_ratings_scatter(ratings, color ='red')
+            plt.title('Mean user ratings by number of ratings given')
+            st.pyplot()
+            st.write('write something about scatter')
+            eda.mean_ratings_scatter(ratings, column ='movieId')
+            plt.title('Mean movie rating by number of ratings received')
+            st.pyplot()
+            st.write('write something about scatter')
+
+        if page_selection_eda == "Movies":
+            st.write('best and worst movies by genre')
+            ratings = train_df[train_df['userId']!=72315]
+            counts = st.number_input('Choose min ratings', min_value=0, max_value=15000, value = 10000, step=1000)
+            ns= st.number_input('Choose n movies', min_value=5, max_value=20, value=10,step=5)
+            eda.plot_ratings(count=counts, n=ns)
+            
+            st.pyplot() 
+        if page_selection_eda == "Directors":
+            st.write('best and worst directors, wordclouds to feed directors page')
+        
+        if page_selection_eda == "Cast":
+            st.write('best and worst cast, word clouds')
+        
+        if page_selection_eda == "Plot Keywords":
+            st.write('best and worst plots, word clouds')
+
+            
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.

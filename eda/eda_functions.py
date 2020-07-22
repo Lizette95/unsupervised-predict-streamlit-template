@@ -23,9 +23,9 @@ sns.set(font_scale=1)
 sns.set_style("white")
 
 # Load data
-train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv')
-movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv')
-imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv')
+train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
+movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index='movieId')
+imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
 
 # Functions
 # Ratings
@@ -93,14 +93,16 @@ def mean_ratings_scatter(df, color='blue', column='userId'):
     plt.ylabel('Number of Ratings')
     plt.show()
 
-def plot_ratings(count, n, color='blue', best=True):
+def plot_ratings(count, n, color='blue', best=True, method='mean'):
     """
     docstring
     """
-    # What are the best and worst movies
-    # Creating a new DF with mean and count
-    movie_avg_ratings = pd.DataFrame(train_df.join(movies_df, on='movieId', how='left').groupby(['movieId', 'title'])['rating'].mean())
-    movie_avg_ratings['count'] = train_df.groupby('movieId')['userId'].count().values
+    eda_df = train_df[train_df['userId']!=72315]
+    if method == 'mean':
+        movie_avg_ratings = pd.merge(eda_df, movies_df, on='movieId', how='left').groupby(['movieId', 'title'])['rating'].mean()
+    else:
+        movie_avg_ratings = pd.DataFrame(eda_df.join(movies_df, on='movieId', how='left').groupby(['movieId', 'title'])['rating'].median())
+    movie_avg_ratings['count'] = eda_df.groupby('movieId')['userId'].count().values
     movie_avg_ratings.reset_index(inplace=True)
     movie_avg_ratings.set_index('movieId', inplace=True)
 
