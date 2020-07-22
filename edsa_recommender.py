@@ -17,12 +17,12 @@
     ---------------------------------------------------------------------
 
     Description: This file is used to launch a minimal streamlit web
-	application. You are expected to extend certain aspects of this script
+    application. You are expected to extend certain aspects of this script
     and its dependencies as part of your predict project.
 
-	For further help with the Streamlit framework, see:
+    For further help with the Streamlit framework, see:
 
-	https://docs.streamlit.io/en/latest/
+    https://docs.streamlit.io/en/latest/
 
 """
 # Streamlit dependencies
@@ -47,6 +47,13 @@ path_to_s3 = ('../unsupervised_data/')
 title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
+title_list = load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
+
+# Loading a css stylesheet
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+load_css("resources/css/style.css")
 
 # App declaration
 def main():
@@ -166,6 +173,23 @@ def main():
             st.write('best and worst plots, word clouds')
 
             
+
+    if page_selection == "Introduction":
+        info_pages = ["Problem landscape", "Problem Statement", "Contributors"]
+        info_page_selection = st.selectbox("", info_pages)
+        if info_page_selection == "Problem landscape":
+            st.markdown("<h1 style='text-align: center;'>Introduction</h1>", unsafe_allow_html=True)
+            st.markdown("<h4 style='text-align: center;'>A movie recommendation web app based on content and collaborative filtering, capable of accurately predicting movies a user might like based on their preferences.</h4>", unsafe_allow_html=True)
+            st.image('resources/imgs/banner.png',use_column_width=True)
+            st.markdown("In today's technology driven world, recommender systems are critical to ensuring users can make appropriate decisions about the content they engage with daily. Recommender systems help users select similar items when something is being chosen online. Netflix or Amazon would suggest different movies and titles that might interest individual users. In education, these systems may be used to suggest learning material that could improve educational outcomes. These types of algorithms lead to service improvement and customer satisfaction. Current recommendation systems - content-based filtering and collaborative filtering - use difference information sources to make recommendations.\n\n")
+            st.write("Web app intro...")
+        
+        
+        if info_page_selection == "Problem Statement":
+            st.write('write something here')
+
+        if info_page_selection == "Contributors":
+            st.write('add something here')
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
