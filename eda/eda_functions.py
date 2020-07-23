@@ -357,3 +357,50 @@ def plot_ratings(count, n=10, color='blue', best=True, method='mean'):
     plt.title(f'Top {n} {title} Movies with Over {count} Ratings', fontsize=14)
     plt.tight_layout()
     plt.show()
+
+    # function that hasn't found a use yet
+def feat_extractor(df, col):
+    """
+    returns a list of all unique features in a DataFrame columns separated by "|"
+    """
+    df.fillna("", inplace=True)
+    feat_set = set()
+    for i in range(len(df[f'{col}'])):
+        for feat in df[f'{col}'].iloc[i].split('|'):
+            feat_set.add(feat)
+    return sorted([feat for feat in feat_set if feat != ""])
+
+def genre_frequency(df):
+    """
+    docstring
+    """
+    # Creat a dict to store values
+    genre_dict = {'genre': list(),
+                 'count': list(),}
+    # Retrieve a list of all possible genres
+    for movie in range(len(df)):
+        gens = df['genres'].iloc[movie].split('|')
+        for gen in gens:
+            if gen not in genre_dict['genre']:
+                genre_dict['genre'].append(gen)
+    # count the number of occurences of each genre
+    for genre in genre_dict['genre']:
+        count = 0
+        for movie in range(len(df)):
+            gens = df['genres'].iloc[movie].split('|')
+            if genre in gens:
+                count += 1
+        genre_dict['count'].append(count)
+        
+        # Calculate metrics
+    data = pd.DataFrame(genre_dict)
+    return data
+    data = genre_frequency(movies_df)
+
+def genre_count(df):
+    plt.figure(figsize=(10,6))
+    ax = sns.barplot(y = df['genre'], x = df['count'], palette='seismic', orient='h')
+    plt.title(f'Number of Movies Per Genre', fontsize=14)
+    plt.ylabel('Genre')
+    plt.xlabel('Count')
+    plt.show()

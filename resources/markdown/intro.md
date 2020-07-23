@@ -1,4 +1,0 @@
-# Heading 1
-## Heading 2
-
-In today's technology driven world, recommender systems are critical to ensuring users can make appropriate decisions about the content they engage with daily. Recommender systems help users select similar items when something is being chosen online. Netflix or Amazon would suggest different movies and titles that might interest individual users. In education, these systems may be used to suggest learning material that could improve educational outcomes. These types of algorithms lead to service improvement and customer satisfaction. Current recommendation systems - content-based filtering and collaborative filtering - use difference information sources to make recommendations.

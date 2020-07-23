@@ -44,7 +44,7 @@ from recommenders.content_based import content_model
 path_to_s3 = ('../unsupervised_data/')
 
 # Data Loading
-title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
+#title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
 
@@ -77,10 +77,23 @@ def main():
 
         # User-based preferences
         # movie_list = pd.merge(train_df, title_list, on = 'movieId', how ='left').groupby('title')['ratings'].mean()
+        imdb_df= dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
         st.write('### Enter Your Three Favorite Movies')
-        movie_1 = st.selectbox('Fisrt Option',title_list[14930:15200])
-        movie_2 = st.selectbox('Second Option',title_list[25055:25255])
-        movie_3 = st.selectbox('Third Option',title_list[21100:21200])
+        
+        genre_list1= eda.feat_extractor(movies_df, 'genres')
+        genre1=st.selectbox('choose genre', genre_list1,key='g1')
+        title_list1= dl.get_titles('../unsupervised_data/unsupervised_movie_data/movies.csv',  genre1)
+        movie_1 = st.selectbox('Fisrt Option',title_list1)
+
+        genre_list2= eda.feat_extractor(movies_df, 'genres')
+        genre2=st.selectbox('choose genre', genre_list2, key='g2')
+        title_list2= dl.get_titles('../unsupervised_data/unsupervised_movie_data/movies.csv', genre2)
+        movie_2 = st.selectbox('Second Option',title_list2)
+
+        genre_list3= eda.feat_extractor(movies_df, 'genres')
+        genre3=st.selectbox('choose genre', genre_list3, key='g3')
+        title_list3= dl.get_titles('../unsupervised_data/unsupervised_movie_data/movies.csv', genre3)
+        movie_3 = st.selectbox('Third Option',title_list3)
         fav_movies = [movie_1,movie_2,movie_3]
 
         # Perform top-10 movie recommendation generation
@@ -121,7 +134,7 @@ def main():
         st.title("Exploratory Data Analysis")
         # st.write("Observations from the Data Exploration")
         # Declare subpages
-        page_options_eda = ["User Interactions", "Movies", "Directors", "Cast", "Plot Keywords"]
+        page_options_eda = ["User Interactions", "Movies", "Directors", "Cast", "Plot Keywords", "Genres"]
         page_selection_eda = st.selectbox("Choose Area of Exploration", page_options_eda)
         if page_selection_eda == "User Interactions":
         # Most Active
@@ -138,7 +151,7 @@ def main():
             st.pyplot()
 
             intro = open('resources/markdown/intro.md').read()
-            st.markdown(intro, unsafe_allow_html=True)
+            st.markdown(intro, unsafe_allow_html=True)##########
             
         # Ratings Distribution
             st.subheader('Ratings Distribution')
@@ -183,7 +196,25 @@ def main():
         if page_selection_eda == "Plot Keywords":
             st.write('best and worst plots, word clouds')
 
-            
+        if page_selection_eda == "Genres":
+            st.subheader('Which genres are the most frequently observed?')
+            #eda.feat_extractor(df, col)
+            #st.write('write something here')
+
+            genres= eda.feature_frequency(movies_df, 'genres')
+            st.write('write something here')
+
+            eda.feature_count(genres, 'genres')
+            st.pyplot()
+            st.write('Drama is the most frequently occuring genre in the database. Approximately 5000 movies have missing genres. We can use the IMDB and TMDB IDs together with the APIs to fill missing data. Further, IMAX is not a genre but rather a proprietary system for mass-viewings.')
+            st.subheader('The above figure does not tell us anything about the popularity of the genres, lets calculate a mean rating and append it to the Data')
+            genres['mean_rating']=eda.mean_calc(genres)
+            st.write('Film-Noir describes Hollywood crime dramas, particularly those that emphasize cynical attitudes and sexual motivations. The 1940s and 1950s are generally regarded as the "classic period" of American film-noir. These movies have the highest ratings but this may be as a result of its niche audence. The same logic can be applied to IMAX movies, as such, we will only include genres with a count of 500 or more.')
+
+            eda.genre_popularity(genres)
+            st.pyplot()
+            st.write('The scores are almost evenly distributed with the exceptions of Documentaries, War, Drama, Musicals, and Romance and Thriller, Action, Sci-Fi, and Horror, which rate higher than average and below average respectively.')
+
 
     if page_selection == "Introduction":
         info_pages = ["Problem landscape", "Contributors"]

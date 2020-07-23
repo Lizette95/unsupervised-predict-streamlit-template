@@ -45,3 +45,14 @@ def load_dataframe(path_to_csv, index):
 
     """
     return pd.read_csv(path_to_csv,index_col=index)
+
+def get_titles(path_to_movies, genre):
+    """
+    docstring
+    """
+    movies_df= pd.read_csv(path_to_movies)
+    #imdb_df= pd.read_csv(path_to_imdb)
+    #full_df= movie_df.join(imdb_df, on='movieId', how= 'left')
+    return sorted(set(movies_df[movies_df['genres'].str.contains(f'{genre}')]['title']))
+
+
