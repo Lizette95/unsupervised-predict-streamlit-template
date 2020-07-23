@@ -47,7 +47,6 @@ path_to_s3 = ('../unsupervised_data/')
 title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
-title_list = load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 
 # Loading a css stylesheet
 def load_css(file_name):
@@ -101,16 +100,16 @@ def main():
 
         if sys == 'Collaborative Based Filtering':
             if st.button("Recommend"):
-                try:
-                    with st.spinner('Crunching the numbers...'):
-                        top_recommendations = collab_model(movie_list=fav_movies,
-                                                           top_n=10)
-                    st.title("We think you'll like:")
-                    for i,j in enumerate(top_recommendations):
-                        st.subheader(str(i+1)+'. '+j)
-                except:
-                    st.error("Oops! Looks like this algorithm does't work.\
-                              We'll need to fix it!")
+                # try:
+                with st.spinner('Crunching the numbers...'):
+                    top_recommendations = collab_model(movie_list=fav_movies,
+                                                        top_n=10)
+                st.title("We think you'll like:")
+                for i,j in enumerate(top_recommendations):
+                    st.subheader(str(i+1)+'. '+j)
+            # except:
+            #     st.error("Oops! Looks like this algorithm does't work.\
+            #                 We'll need to fix it!")
     # -------------------------------------------------------------------
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
