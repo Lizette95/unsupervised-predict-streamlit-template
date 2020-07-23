@@ -47,7 +47,6 @@ path_to_s3 = ('../unsupervised_data/')
 title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
-title_list = load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 
 # Loading a css stylesheet
 def load_css(file_name):
