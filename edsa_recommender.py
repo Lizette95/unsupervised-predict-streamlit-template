@@ -136,7 +136,10 @@ def main():
             n = st.number_input('Enter number of users (1-20)',min_value=5, max_value=50, step = 5, value=10)
             ratings_plot = eda.user_ratings_count(ratings, n)
             st.pyplot()
-            st.write('write something about top users')
+
+            intro = open('resources/markdown/intro.md').read()
+            st.markdown(intro, unsafe_allow_html=True)
+            
         # Ratings Distribution
             st.subheader('Ratings Distribution')
             eda.number_users_per_rating(ratings)
