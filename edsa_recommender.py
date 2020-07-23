@@ -47,7 +47,7 @@ path_to_s3 = ('../unsupervised_data/')
 title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
-title_list = load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
+
 
 # Loading a css stylesheet
 def load_css(file_name):
@@ -155,14 +155,23 @@ def main():
             st.pyplot()
             st.write('write something about scatter')
 
+
         if page_selection_eda == "Movies":
             st.write('best and worst movies by genre')
-            ratings = train_df[train_df['userId']!=72315]
+            #ratings = train_df[train_df['userId']!=72315]
             counts = st.number_input('Choose min ratings', min_value=0, max_value=15000, value = 10000, step=1000)
             ns= st.number_input('Choose n movies', min_value=5, max_value=20, value=10,step=5)
-            eda.plot_ratings(count=counts, n=ns)
+            eda.plot_ratings(count=counts, n=ns, color='red', best=True, method='mean')
+            #plt.tight_layout()
+            st.pyplot()
+            st.write('By filtering movies with less than 10000 ratings, we find that the most popular movies are unsurprising titles. The Shawshank Redemption and The Godfather unsurprisingly top the list. What is interesting is that Movies made post 2000 do not feature often. Do users have a preference to Older movies?')
+
+            eda.plot_ratings(count=counts, n=ns, color='green', best=False, method='mean')
+            #plt.tight_layout()
+            st.pyplot()
+            st.write('Obviously, people did not like Battlefield too much and with 1200 ratings, they really wanted it to be known. It is interesting how many sequels appear in the list')
             
-            st.pyplot() 
+
         if page_selection_eda == "Directors":
             st.write('best and worst directors, wordclouds to feed directors page')
         
