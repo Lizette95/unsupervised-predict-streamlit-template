@@ -44,7 +44,7 @@ from recommenders.content_based import content_model
 path_to_s3 = ('../unsupervised_data/')
 
 # Data Loading
-#title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
+title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
 
