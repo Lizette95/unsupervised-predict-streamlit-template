@@ -215,7 +215,8 @@ def feature_count(df, column):
     plt.ylabel(f'{column}')
     plt.xlabel('Count')
     plt.show()
-
+    
+    #mean_ratings = pd.DataFrame(train_df.join(movies_df, on='movieId', how='left').join(imdb_df, on = 'movieId', how = 'left').groupby(['movieId'])['rating'].mean())
 def mean_calc(feat_df, ratings = train_df, movies = movies_df, metadata = imdb_df, column = 'genres'):
     """
     Function that calculates the mean ratings of a feature
@@ -247,6 +248,8 @@ def mean_calc(feat_df, ratings = train_df, movies = movies_df, metadata = imdb_d
         mean = round(movie_eda2[movie_eda2[f'{column}'].str.contains(feat)]['rating'].mean(),2)
         means.append(mean)
     return means
+    genres['mean_rating'] = mean_calc(genres)
+    genres.sort_values('mean_rating', ascending=False).head(5)
 
 def genre_popularity(df):
     """

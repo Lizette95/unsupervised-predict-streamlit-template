@@ -207,8 +207,9 @@ def main():
             eda.feature_count(genres, 'genres')
             st.pyplot()
             st.write('Drama is the most frequently occuring genre in the database. Approximately 5000 movies have missing genres. We can use the IMDB and TMDB IDs together with the APIs to fill missing data. Further, IMAX is not a genre but rather a proprietary system for mass-viewings.')
-            st.subheader('The above figure does not tell us anything about the popularity of the genres, lets calculate a mean rating and append it to the Data')
+            st.write('The above figure does not tell us anything about the popularity of the genres, lets calculate a mean rating and append it to the Data')
             genres['mean_rating']=eda.mean_calc(genres)
+            st.pyplot()
             st.write('Film-Noir describes Hollywood crime dramas, particularly those that emphasize cynical attitudes and sexual motivations. The 1940s and 1950s are generally regarded as the "classic period" of American film-noir. These movies have the highest ratings but this may be as a result of its niche audence. The same logic can be applied to IMAX movies, as such, we will only include genres with a count of 500 or more.')
 
             eda.genre_popularity(genres)
