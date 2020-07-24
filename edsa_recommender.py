@@ -121,7 +121,7 @@ def main():
         st.title("Exploratory Data Analysis")
         # st.write("Observations from the Data Exploration")
         # Declare subpages
-        page_options_eda = ["User Interactions", "Movies", "Directors", "Cast", "Plot Keywords", "Genres"]
+        page_options_eda = ["User Interactions", "Movies", "Genres", "Directors"]
         page_selection_eda = st.selectbox("Choose Area of Exploration", page_options_eda)
         if page_selection_eda == "User Interactions":
         # Most Active
@@ -177,11 +177,11 @@ def main():
         if page_selection_eda == "Directors":
             st.write('best and worst directors, wordclouds to feed directors page')
         
-        if page_selection_eda == "Cast":
-            st.write('best and worst cast, word clouds')
+        # if page_selection_eda == "Cast":
+        #     st.write('best and worst cast, word clouds')
         
-        if page_selection_eda == "Plot Keywords":
-            st.write('best and worst plots, word clouds')
+        # if page_selection_eda == "Plot Keywords":
+        #     st.write('best and worst plots, word clouds')
 
         if page_selection_eda == "Genres":
             st.subheader('Which genres are the most frequently observed?')
@@ -191,14 +191,16 @@ def main():
             genres= eda.feature_frequency(movies_df, 'genres')
             st.write('write something here')
 
-            eda.feature_count(genres, 'genres')
+            eda.feature_count(genres.sort_values(by = 'count', ascending=False), 'genres')
             st.pyplot()
             st.write('Drama is the most frequently occuring genre in the database. Approximately 5000 movies have missing genres. We can use the IMDB and TMDB IDs together with the APIs to fill missing data. Further, IMAX is not a genre but rather a proprietary system for mass-viewings.')
             st.subheader('The above figure does not tell us anything about the popularity of the genres, lets calculate a mean rating and append it to the Data')
             genres['mean_rating']=eda.mean_calc(genres)
+            show_data = st.checkbox('Show raw genre data?')
+            if show_data:
+                st.write(genres.sort_values('mean_rating', ascending=False))
             st.write('Film-Noir describes Hollywood crime dramas, particularly those that emphasize cynical attitudes and sexual motivations. The 1940s and 1950s are generally regarded as the "classic period" of American film-noir. These movies have the highest ratings but this may be as a result of its niche audence. The same logic can be applied to IMAX movies, as such, we will only include genres with a count of 500 or more.')
-
-            eda.genre_popularity(genres)
+            eda.genre_popularity(genres.sort_values(by='mean_rating'))
             st.pyplot()
             st.write('The scores are almost evenly distributed with the exceptions of Documentaries, War, Drama, Musicals, and Romance and Thriller, Action, Sci-Fi, and Horror, which rate higher than average and below average respectively.')
 
