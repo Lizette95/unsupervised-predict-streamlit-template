@@ -261,7 +261,7 @@ def genre_popularity(df):
     mean = plot_data['mean_rating'].mean()
     min_ = plot_data['mean_rating'].min()
     max_ = plot_data['mean_rating'].max()
-    sns.barplot(y = plot_data.index, x = plot_data['mean_rating'], order = plot_data.index, orient='h',palette='seismic')
+    sns.barplot(y = plot_data['genres'], x = plot_data['mean_rating'], order = plot_data['genres'], orient='h',palette='seismic')
     plt.axvline(x=mean, label = f'mean {round(mean,1)}' , color='black', lw=1, ls ='--')
     plt.axvline(x=min_, label = f'min {round(min_,1)}' , color='red', lw=1, ls = '--')
     plt.axvline(x=max_, label = f'max {max_}' , color='blue', lw=1,ls = '--')
@@ -269,6 +269,7 @@ def genre_popularity(df):
     plt.ylabel('Genre')
     plt.xlabel('Mean Rating')
     plt.legend(loc='lower center')
+    plt.tight_layout()
     plt.show()
 
 # Directors
