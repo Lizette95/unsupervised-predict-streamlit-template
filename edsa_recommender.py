@@ -44,7 +44,7 @@ from recommenders.content_based import content_model
 path_to_s3 = ('../unsupervised_data/')
 
 # Data Loading
-#title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
+title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
 
@@ -77,23 +77,10 @@ def main():
 
         # User-based preferences
         # movie_list = pd.merge(train_df, title_list, on = 'movieId', how ='left').groupby('title')['ratings'].mean()
-        imdb_df= dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
         st.write('### Enter Your Three Favorite Movies')
-        
-        genre_list1= eda.feat_extractor(movies_df, 'genres')
-        genre1=st.selectbox('choose genre', genre_list1,key='g1')
-        title_list1= dl.get_titles('../unsupervised_data/unsupervised_movie_data/movies.csv',  genre1)
-        movie_1 = st.selectbox('Fisrt Option',title_list1)
-
-        genre_list2= eda.feat_extractor(movies_df, 'genres')
-        genre2=st.selectbox('choose genre', genre_list2, key='g2')
-        title_list2= dl.get_titles('../unsupervised_data/unsupervised_movie_data/movies.csv', genre2)
-        movie_2 = st.selectbox('Second Option',title_list2)
-
-        genre_list3= eda.feat_extractor(movies_df, 'genres')
-        genre3=st.selectbox('choose genre', genre_list3, key='g3')
-        title_list3= dl.get_titles('../unsupervised_data/unsupervised_movie_data/movies.csv', genre3)
-        movie_3 = st.selectbox('Third Option',title_list3)
+        movie_1 = st.selectbox('Fisrt Option',title_list[14930:15200])
+        movie_2 = st.selectbox('Second Option',title_list[25055:25255])
+        movie_3 = st.selectbox('Third Option',title_list[21100:21200])
         fav_movies = [movie_1,movie_2,movie_3]
 
         # Perform top-10 movie recommendation generation
