@@ -204,12 +204,13 @@ def main():
 
 
     if page_selection == "Introduction":
-        info_pages = ["Problem landscape", "Contributors"]
+        info_pages = ["General Information", "Contributors"]
         info_page_selection = st.selectbox("", info_pages)
-        if info_page_selection == "Problem landscape":
+        if info_page_selection == "General Information":
+            st.image('resources/imgs/banner.png',use_column_width=True)
             st.markdown("<h1 style='text-align: center;'>Introduction</h1>", unsafe_allow_html=True)
             st.markdown("<h4 style='text-align: center;'>A movie recommendation web app based on content and collaborative filtering, capable of accurately predicting movies a user might like based on their preferences.</h4>", unsafe_allow_html=True)
-            st.image('resources/imgs/banner.png',use_column_width=True)
+            
             st.markdown("In today's technology driven world, recommender systems are critical to ensuring users can make appropriate decisions about the content they engage with daily. Recommender systems help users select similar items when something is being chosen online. Netflix or Amazon would suggest different movies and titles that might interest individual users. In education, these systems may be used to suggest learning material that could improve educational outcomes. These types of algorithms lead to service improvement and customer satisfaction. Current recommendation systems - content-based filtering and collaborative filtering - use difference information sources to make recommendations.\n\n")
             st.write("Our Web App suggests new movies a user might be interested in based on other movies they like.")
         
