@@ -121,7 +121,7 @@ def main():
         st.title("Exploratory Data Analysis")
         # st.write("Observations from the Data Exploration")
         # Declare subpages
-        page_options_eda = ["User Interactions", "Movies", "Directors", "Cast", "Plot Keywords", "Genres"]
+        page_options_eda = ["User Interactions", "Movies", "Genres", "Directors"]
         page_selection_eda = st.selectbox("Choose Area of Exploration", page_options_eda)
         if page_selection_eda == "User Interactions":
         # Most Active
@@ -177,11 +177,11 @@ def main():
         if page_selection_eda == "Directors":
             st.write('best and worst directors, wordclouds to feed directors page')
         
-        if page_selection_eda == "Cast":
-            st.write('best and worst cast, word clouds')
+        # if page_selection_eda == "Cast":
+        #     st.write('best and worst cast, word clouds')
         
-        if page_selection_eda == "Plot Keywords":
-            st.write('best and worst plots, word clouds')
+        # if page_selection_eda == "Plot Keywords":
+        #     st.write('best and worst plots, word clouds')
 
         if page_selection_eda == "Genres":
             st.subheader('Which genres are the most frequently observed?')
@@ -191,62 +191,78 @@ def main():
             genres= eda.feature_frequency(movies_df, 'genres')
             st.write('write something here')
 
-            eda.feature_count(genres, 'genres')
+            eda.feature_count(genres.sort_values(by = 'count', ascending=False), 'genres')
             st.pyplot()
             st.write('Drama is the most frequently occuring genre in the database. Approximately 5000 movies have missing genres. We can use the IMDB and TMDB IDs together with the APIs to fill missing data. Further, IMAX is not a genre but rather a proprietary system for mass-viewings.')
             st.subheader('The above figure does not tell us anything about the popularity of the genres, lets calculate a mean rating and append it to the Data')
             genres['mean_rating']=eda.mean_calc(genres)
+            show_data = st.checkbox('Show raw genre data?')
+            if show_data:
+                st.write(genres.sort_values('mean_rating', ascending=False))
             st.write('Film-Noir describes Hollywood crime dramas, particularly those that emphasize cynical attitudes and sexual motivations. The 1940s and 1950s are generally regarded as the "classic period" of American film-noir. These movies have the highest ratings but this may be as a result of its niche audence. The same logic can be applied to IMAX movies, as such, we will only include genres with a count of 500 or more.')
-
-            eda.genre_popularity(genres)
+            eda.genre_popularity(genres.sort_values(by='mean_rating'))
             st.pyplot()
             st.write('The scores are almost evenly distributed with the exceptions of Documentaries, War, Drama, Musicals, and Romance and Thriller, Action, Sci-Fi, and Horror, which rate higher than average and below average respectively.')
 
 
     if page_selection == "Introduction":
-        info_pages = ["Problem landscape", "Contributors"]
+        info_pages = ["General Information", "Contributors"]
         info_page_selection = st.selectbox("", info_pages)
-        if info_page_selection == "Problem landscape":
-            st.markdown("<h1 style='text-align: center;'>Introduction</h1>", unsafe_allow_html=True)
-            st.markdown("<h4 style='text-align: center;'>A movie recommendation web app based on content and collaborative filtering, capable of accurately predicting movies a user might like based on their preferences.</h4>", unsafe_allow_html=True)
+        if info_page_selection == "General Information":
             st.image('resources/imgs/banner.png',use_column_width=True)
-            st.markdown("In today's technology driven world, recommender systems are critical to ensuring users can make appropriate decisions about the content they engage with daily. Recommender systems help users select similar items when something is being chosen online. Netflix or Amazon would suggest different movies and titles that might interest individual users. In education, these systems may be used to suggest learning material that could improve educational outcomes. These types of algorithms lead to service improvement and customer satisfaction. Current recommendation systems - content-based filtering and collaborative filtering - use difference information sources to make recommendations.\n\n")
-            st.write("Our Web App suggests new movies a user might be interested in based on other movies they like.")
+            st.markdown("<h1 style='text-align: center;'>The Flixters JHB_RM4</h1>", unsafe_allow_html=True)
+            st.markdown(open('resources/markdown/intro.md').read(), unsafe_allow_html=True)
+            see_raw = st.checkbox("Show data")
+            if see_raw:
+                st.write(dl.load_dataframe('resources/data/ratings.csv', index='userId').head(10))
+                st.write(dl.load_dataframe('resources/data/movies.csv',index='movieId').head(10))
         
         if info_page_selection == "Contributors":
             st.markdown("<h1 style='text-align: center;'>Contributors</h1>", unsafe_allow_html=True)
             st.markdown("\n\n")
+            
+            # Lizette
             st.markdown("<h3 style='text-align: center;'>Lizette Loubser</h3>", unsafe_allow_html=True)
-            st.markdown("<p style='text-align: center;'>Modelling</p>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align: center;'>Team Coordinator and Machine Learning Engineer</p>", unsafe_allow_html=True)
             st.image('resources/imgs/Lizette.jpg', width=120)
             st.markdown("<a href='http://www.linkedin.com/in/lizette-loubser' target='_blank'>LinkedIn</a>", unsafe_allow_html=True)
             st.markdown("<a href='https://github.com/Lizette95' target='_blank'>GitHub</a>", unsafe_allow_html=True)
+            
+            # Bulelani
+            st.markdown("<h3 style='text-align: center;'>Bulelani Nkosi</h3>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align: center;'>Streamlit Coordinator and Data Analyst</p>", unsafe_allow_html=True)
+            st.image('resources/imgs/Bulelani.jpg', width=120)
+            st.markdown("<a href='https://www.linkedin.com/in/bulelanin' target='_blank'>LinkedIn</a>", unsafe_allow_html=True)
+            st.markdown("<a href='https://github.com/BNkosi' target='_blank'>GitHub</a>", unsafe_allow_html=True)
+                        
+            # Neli
             st.markdown("<h3 style='text-align: center;'>Nelisiwe Mabanga</h3>", unsafe_allow_html=True)
-            st.markdown("<p style='text-align: center;'>Insights</p>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align: center;'>Data Journalist and Analyst</p>", unsafe_allow_html=True)
             st.image('resources/imgs/nelly.jpeg', width=120)
             st.markdown("<a href='https://www.linkedin.com/in/nelisiwe-mabanga-8bb409106/' target='_blank'>LinkedIn</a>", unsafe_allow_html=True)
             st.markdown("<a href='https://github.com/Phiwe-Mabanga' target='_blank'>GitHub</a>", unsafe_allow_html=True)
+            
+            # Nolu
             st.markdown("<h3 style='text-align: center;'>Noluthando Khumalo</h3>", unsafe_allow_html=True)
             st.markdown("<p style='text-align: center;'>Streamlit App Design</p>", unsafe_allow_html=True)
             st.image('resources/imgs/Thando.jpg', width=120)
             st.markdown("<a href='https://www.linkedin.com/in/noluthando-khumalo-3870ab191/' target='_blank'>LinkedIn</a>", unsafe_allow_html=True)
             st.markdown("<a href='https://github.com/ThandoKhumalo' target='_blank'>GitHub</a>", unsafe_allow_html=True)
+            
+            # Nompilo
             st.markdown("<h3 style='text-align: center;'>Nompilo Nhlabathi</h3>", unsafe_allow_html=True)
             st.markdown("<p style='text-align: center;'>Streamlit App Design</p>", unsafe_allow_html=True)
             st.image('resources/imgs/Nompilo.png', width=120)
             st.markdown("<a href='http://www.linkedin.com/in/nompilo-nhlabathi-2701791b2' target='_blank'>LinkedIn</a>", unsafe_allow_html=True)
             st.markdown("<a href='https://github.com/mapilos' target='_blank'>GitHub</a>", unsafe_allow_html=True)
+            
+            # Sizwe
             st.markdown("<h3 style='text-align: center;'>Sizwe Bhembe</h3>", unsafe_allow_html=True)
-            st.markdown("<p style='text-align: center;'>Insights</p>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align: center;'>Team member</p>", unsafe_allow_html=True)
             st.image('resources/imgs/Sizwe.jpg', width=120)
             st.markdown("<a href='https://www.linkedin.com/in/sizwe-bhembe-372880101' target='_blank'>LinkedIn</a>", unsafe_allow_html=True)
             #st.markdown("<a href='github.com/sjbhembe' target='_blank'>GitHub</a>", unsafe_allow_html=True)
-            st.markdown("<h3 style='text-align: center;'>Bulelani Nkosi</h3>", unsafe_allow_html=True)
-            st.markdown("<p style='text-align: center;'>Streamlit App Functionality</p>", unsafe_allow_html=True)
-            st.image('resources/imgs/Bulelani.jpg', width=120)
-            st.markdown("<a href='https://www.linkedin.com/in/bulelanin' target='_blank'>LinkedIn</a>", unsafe_allow_html=True)
-            st.markdown("<a href='https://github.com/BNkosi' target='_blank'>GitHub</a>", unsafe_allow_html=True)
-
+            
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
 
