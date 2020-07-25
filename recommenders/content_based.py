@@ -35,8 +35,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 
 # Importing data
-movies = pd.read_csv('resources/data/movies.csv', sep = ',',delimiter=',')
-ratings = pd.read_csv('resources/data/ratings.csv')
+movies = pd.read_csv('/home/explore-student/unsupervised_data/unsupervised_movie_data/movies.csv', sep = ',',delimiter=',')
+ratings = pd.read_csv('/home/explore-student/unsupervised_data/unsupervised_movie_data/train.csv')
 movies.dropna(inplace=True)
 
 def data_preprocessing(subset_size):
@@ -79,7 +79,7 @@ def content_model(movie_list,top_n=10):
 
     """
     # Initializing the empty list of recommended movies
-    data = data_preprocessing(2000) ## CHANGE SUBSET TO MATCH RANGE IN APP
+    data = data_preprocessing(40000) ## CHANGE SUBSET TO MATCH RANGE IN APP
     # Instantiating and generating the count matrix
     count_vec = CountVectorizer()
     count_matrix = count_vec.fit_transform(data['keyWords'])
@@ -87,6 +87,7 @@ def content_model(movie_list,top_n=10):
     names.set_index('movieId',inplace=True)
     indices = pd.Series(names['title'])
     cosine_sim = cosine_similarity(count_matrix, count_matrix)
+    #cosine_sim = pairwise_kernels(count_matrix, metric='cosine', njobs = -1)
     cosine_sim = pd.DataFrame(cosine_sim, index = data['movieId'].values.astype(int), columns = data['movieId'].values.astype(int))
     # Getting the index of the movie that matches the title
     idx_1 = indices[indices == movie_list[0]].index[0]
