@@ -304,7 +304,7 @@ def dir_mean(df):
     df.set_index('director', inplace=True)
 
     direct_ratings = []
-    directors_eda = train_df.join(imdb_df, on = 'movieId', how = 'left')
+    directors_eda = train_df.merge(imdb_df.set_index('movieId'), on = 'movieId', how = 'left')
     for director in df.index:
         rating = round(directors_eda[directors_eda['director']==director]['rating'].mean(),2)
         direct_ratings.append(rating)

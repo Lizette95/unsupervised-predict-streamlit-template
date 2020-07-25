@@ -47,6 +47,7 @@ path_to_s3 = ('../unsupervised_data/')
 title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
+imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
 
 # Loading a css stylesheet
 def load_css(file_name):
@@ -144,18 +145,20 @@ def main():
             st.subheader('Ratings Distribution')
             eda.number_users_per_rating(ratings)
             st.pyplot()
-            st.write('write something about ratings ditribution')
+            st.write('Percentage of users per rating, most movies get a rating of 4.0.')
 
         # Rating v number of ratings
             st.subheader('Ratings trends')
             eda.mean_ratings_scatter(ratings, color ='red')
             plt.title('Mean user ratings by number of ratings given')
             st.pyplot()
-            st.write('write something about scatter')
+            st.write('It doesnot seem to be a relationship. As the number of ratings and how a user rates a movie do not show any correlation.')
+            
+            st.write('Q: Is there a relationship between the number of ratings a movie has and how highly it is rated?')
             eda.mean_ratings_scatter(ratings, column ='movieId')
             plt.title('Mean movie rating by number of ratings received')
             st.pyplot()
-            st.write('write something about scatter')
+            st.write('This time we do see a relationship, The more ratings a movie has, the more highly it is likely to be rated. This confirms our intuitive understanding that the more highly recommended a movie is, the more likely it is to be well received by the user.')
 
 
         if page_selection_eda == "Movies":
@@ -175,8 +178,27 @@ def main():
             
 
         if page_selection_eda == "Directors":
-            st.write('best and worst directors, wordclouds to feed directors page')
-        
+            st.write('Q: Who are the most common directors?')
+            #st.write('Some movies do not have a director listed. once again, the IMDB API can be used to retrieve this data')
+            directors=eda.count_directors(imdb_df)
+            
+            #county = st.number_input('Choose min directors', min_value=0, max_value=15000, value = 10000, step=1000)
+            nt= st.number_input('Choose n directors', min_value=5, max_value=20, value=10,step=5)
+            eda.feature_count(directors.head(nt), 'director')
+            st.pyplot()
+            st.write('Once again we need to calculate a mean rating for each director in order to determine who is the most popular')
+            
+            directors = eda.dir_mean(directors)
+            
+            eda.feat_popularity(directors.head(nt), 'Director')
+            st.pyplot()
+            st.write('Immediately, we see some very well known names, Stephen King and Quentin Tarantino are unsurprisingly top of the list. It begs the question, who are the worst rated directors?')
+            eda.feat_popularity(directors.tail(nt), 'Director')
+            st.pyplot()
+            st.write('It is unfortunate to find Tyler Perry and Akira Toriyama so poorly rated. Tyler Perry is best known for his Madea series of movies. As we saw from the least popular movies, sequels do not perform well and Madea has numerous sequels.')
+            st.write('Akira Toriyama is the Manga artist behind the Dragon Ball franchise. Dragonball is important to Anime communities because it popularized anime in the west. However, despite its loyal fan base, it remains far from being the best anime.')
+
+
         # if page_selection_eda == "Cast":
         #     st.write('best and worst cast, word clouds')
         
@@ -185,11 +207,9 @@ def main():
 
         if page_selection_eda == "Genres":
             st.subheader('Which genres are the most frequently observed?')
-            #eda.feat_extractor(df, col)
-            #st.write('write something here')
 
             genres= eda.feature_frequency(movies_df, 'genres')
-            st.write('write something here')
+            #st.write('write something here')
 
             eda.feature_count(genres.sort_values(by = 'count', ascending=False), 'genres')
             st.pyplot()
