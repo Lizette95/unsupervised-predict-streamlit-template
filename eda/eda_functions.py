@@ -10,11 +10,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-<<<<<<< HEAD
 import streamlit as st
 
-=======
->>>>>>> master
 from utils import data_loader as dl
 
 sns.set(font_scale=1)
