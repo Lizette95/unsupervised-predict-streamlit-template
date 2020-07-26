@@ -1,6 +1,6 @@
-body, .sidebar-content, .block-container, .fullScreenFrame {
+/* body, .block-container, .fullScreenFrame {
   background-color: #fcdee9;
-}
+} */
 
 .fullScreenFrame > div {
     display: flex;
