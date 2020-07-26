@@ -10,8 +10,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+<<<<<<< HEAD
 import streamlit as st
 
+=======
+>>>>>>> master
 from utils import data_loader as dl
 
 sns.set(font_scale=1)
@@ -20,7 +23,7 @@ sns.set_style("white")
 # Load data
 train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
 movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index='movieId')
-imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
+imdb_df = dl.load_dataframe('/home/explore-student/unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
 
 # Functions
 # Ratings
