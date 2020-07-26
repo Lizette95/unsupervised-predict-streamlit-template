@@ -10,12 +10,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from time import time
-import random
-import cufflinks as cf
-from sklearn.decomposition import PCA
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-init_notebook_mode(connected=True)
+import streamlit as st
 
 from utils import data_loader as dl
 
@@ -160,6 +155,7 @@ def feat_extractor(df, col):
             feat_set.add(feat)
     return sorted([feat for feat in feat_set if feat != ""])
 
+@st.cache(allow_output_mutation=True)
 def feature_frequency(df, column):
     """
     Function to count the number of occurences of metadata such as genre
@@ -215,7 +211,10 @@ def feature_count(df, column):
     plt.ylabel(f'{column}')
     plt.xlabel('Count')
     plt.show()
+    
+    #mean_ratings = pd.DataFrame(train_df.join(movies_df, on='movieId', how='left').join(imdb_df, on = 'movieId', how = 'left').groupby(['movieId'])['rating'].mean())
 
+@st.cache(allow_output_mutation=True)
 def mean_calc(feat_df, ratings = train_df, movies = movies_df, metadata = imdb_df, column = 'genres'):
     """
     Function that calculates the mean ratings of a feature
@@ -247,6 +246,8 @@ def mean_calc(feat_df, ratings = train_df, movies = movies_df, metadata = imdb_d
         mean = round(movie_eda2[movie_eda2[f'{column}'].str.contains(feat)]['rating'].mean(),2)
         means.append(mean)
     return means
+    genres['mean_rating'] = mean_calc(genres)
+    genres.sort_values('mean_rating', ascending=False).head(5)
 
 def genre_popularity(df):
     """
@@ -296,12 +297,12 @@ def count_directors(df, count = 10):
     # Lets only take directors who have made 10 or more movies otherwise we will have to analyze 11000 directors
     directors = directors[directors['count']>=count]
     return directors.sort_values('count', ascending = False)
-
+@st.cache(allow_output_mutation=True)
 def dir_mean(df):
     df.set_index('director', inplace=True)
 
     direct_ratings = []
-    directors_eda = train_df.join(imdb_df, on = 'movieId', how = 'left')
+    directors_eda = train_df.merge(imdb_df.set_index('movieId'), on = 'movieId', how = 'left')
     for director in df.index:
         rating = round(directors_eda[directors_eda['director']==director]['rating'].mean(),2)
         direct_ratings.append(rating)
