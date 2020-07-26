@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-@st.cache()
 def load_movie_titles(path_to_movies):
     """Load movie titles from database records.
 
@@ -31,7 +30,6 @@ def load_movie_titles(path_to_movies):
     movie_list = list(df['title'])
     return movie_list
 
-@st.cache()
 def load_dataframe(path_to_csv, index):
     """Load train data from database records.
 

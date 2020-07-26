@@ -180,13 +180,10 @@ def main():
             st.write('This time we do see a relationship, The more ratings a movie has, the more highly it is likely to be rated. This confirms our intuitive understanding that the more highly recommended a movie is, the more likely it is to be well received by the user.')
 
         if page_selection_eda == "Movies":
-            movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
-            imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
-        
-        
-            st.subheader('Best and Worst Movies by Genre')
+            st.sidebar.markdown(open('resources/markdown/eda/movies.md').read(), unsafe_allow_html=True)
             counts = st.number_input('Choose min ratings', min_value=0, max_value=15000, value = 10000, step=1000)
             ns= st.number_input('Choose n movies', min_value=5, max_value=20, value=10,step=5)
+            st.subheader('Best and Worst Movies by Genre')
             eda.plot_ratings(count=counts, n=ns, color='red', best=True, method='mean')
             #plt.tight_layout()
             st.pyplot()
@@ -195,7 +192,7 @@ def main():
             eda.plot_ratings(count=counts, n=ns, color='green', best=False, method='mean')
             #plt.tight_layout()
             st.pyplot()
-            st.write('Obviously, people did not like Battlefield too much and with 1200 ratings, they really wanted it to be known. It is interesting how many sequels appear in the list')
+            st.write('Obviously, users did not like Battlefield too much and with 1200 ratings, they really wanted it to be known. It is interesting how many sequels appear in the list')
             
 
         if page_selection_eda == "Directors":
@@ -227,8 +224,10 @@ def main():
         #     st.write('best and worst plots, word clouds')
 
         if page_selection_eda == "Genres":
-            st.subheader('Which genres are the most frequently observed?')
-
+            st.subheader('Genre Distribution')
+            movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
+            imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
+        
             genres= eda.feature_frequency(movies_df, 'genres')
             #st.write('write something here')
 
@@ -271,8 +270,8 @@ def main():
         
         if info_page_selection == "Contributors":
             st.sidebar.markdown(open('resources/markdown/introduction/contrib.md').read(), unsafe_allow_html=True)
-            st.markdown("<h1 style='text-align: center;'>Contributors</h1>", unsafe_allow_html=True)
-            st.markdown("\n\n")
+            # st.markdown("<h1 style='text-align: center;'>Contributors</h1>", unsafe_allow_html=True)
+            # st.markdown("\n\n")
             
             # Lizette
             st.markdown("<h3 style='text-align: center;'>Lizette Loubser</h3>", unsafe_allow_html=True)
