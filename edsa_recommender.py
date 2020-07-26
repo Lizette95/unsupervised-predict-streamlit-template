@@ -50,7 +50,7 @@ path_to_s3 = ('../unsupervised_data/')
 def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-load_css("resources/css/style.css")
+# load_css("resources/css/style.css")
 
 # App declaration
 def main():
@@ -196,22 +196,31 @@ def main():
             
 
         if page_selection_eda == "Directors":
-            st.write('Q: Who are the most common directors?')
+            st.sidebar.markdown(open('resources/markdown/eda/directors.md').read(), unsafe_allow_html=True)
+            imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
             #st.write('Some movies do not have a director listed. once again, the IMDB API can be used to retrieve this data')
             directors=eda.count_directors(imdb_df)
             
             #county = st.number_input('Choose min directors', min_value=0, max_value=15000, value = 10000, step=1000)
             nt= st.number_input('Choose n directors', min_value=5, max_value=20, value=10,step=5)
+            st.subheader('Most Common Directors')
             eda.feature_count(directors.head(nt), 'director')
+            plt.title('Number of movies per director')
+            plt.tight_layout()
             st.pyplot()
             st.write('Once again we need to calculate a mean rating for each director in order to determine who is the most popular')
             
             directors = eda.dir_mean(directors)
             
+            st.subheader('Most popular directors')
             eda.feat_popularity(directors.head(nt), 'Director')
+            plt.tight_layout()
             st.pyplot()
+
             st.write('Immediately, we see some very well known names, Stephen King and Quentin Tarantino are unsurprisingly top of the list. It begs the question, who are the worst rated directors?')
+            st.subheader('Least popular directors')
             eda.feat_popularity(directors.tail(nt), 'Director')
+            plt.tight_layout()
             st.pyplot()
             st.write('It is unfortunate to find Tyler Perry and Akira Toriyama so poorly rated. Tyler Perry is best known for his Madea series of movies. As we saw from the least popular movies, sequels do not perform well and Madea has numerous sequels.')
             st.write('Akira Toriyama is the Manga artist behind the Dragon Ball franchise. Dragonball is important to Anime communities because it popularized anime in the west. However, despite its loyal fan base, it remains far from being the best anime.')
@@ -224,10 +233,9 @@ def main():
         #     st.write('best and worst plots, word clouds')
 
         if page_selection_eda == "Genres":
+            st.sidebar.markdown(open('resources/markdown/eda/genres.md').read(), unsafe_allow_html=True)
             st.subheader('Genre Distribution')
             movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
-            imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
-        
             genres= eda.feature_frequency(movies_df, 'genres')
             #st.write('write something here')
 

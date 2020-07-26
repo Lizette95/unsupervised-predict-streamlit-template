@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import streamlit as st
 
 from utils import data_loader as dl
 
@@ -154,6 +155,7 @@ def feat_extractor(df, col):
             feat_set.add(feat)
     return sorted([feat for feat in feat_set if feat != ""])
 
+@st.cache(allow_output_mutation=True)
 def feature_frequency(df, column):
     """
     Function to count the number of occurences of metadata such as genre
@@ -211,6 +213,8 @@ def feature_count(df, column):
     plt.show()
     
     #mean_ratings = pd.DataFrame(train_df.join(movies_df, on='movieId', how='left').join(imdb_df, on = 'movieId', how = 'left').groupby(['movieId'])['rating'].mean())
+
+@st.cache(allow_output_mutation=True)
 def mean_calc(feat_df, ratings = train_df, movies = movies_df, metadata = imdb_df, column = 'genres'):
     """
     Function that calculates the mean ratings of a feature
@@ -293,7 +297,7 @@ def count_directors(df, count = 10):
     # Lets only take directors who have made 10 or more movies otherwise we will have to analyze 11000 directors
     directors = directors[directors['count']>=count]
     return directors.sort_values('count', ascending = False)
-
+@st.cache(allow_output_mutation=True)
 def dir_mean(df):
     df.set_index('director', inplace=True)
 
