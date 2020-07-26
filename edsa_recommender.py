@@ -44,10 +44,7 @@ from recommenders.content_based import content_model
 path_to_s3 = ('../unsupervised_data/')
 
 # Data Loading
-title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
-train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
-movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
-imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
+
 
 # Loading a css stylesheet
 def load_css(file_name):
@@ -60,13 +57,18 @@ def main():
 
     # DO NOT REMOVE the 'Recommender System' option below, however,
     # you are welcome to add more options to enrich your app.
-    page_options = ["Introduction", "Exploratory Data Analysis", "Directors Profiles", "Recommender System", "Solution Overview"]
+    page_options = ["Introduction", "Exploratory Data Analysis", "Recommender System", "Solution Overview"]
+
+###########################################################################################
+################################ MODEL ####################################################
+###########################################################################################
 
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
     # -------------------------------------------------------------------
     page_selection = st.sidebar.selectbox("Choose Option", page_options)
     if page_selection == "Recommender System":
+        title_list = dl.load_movie_titles('../unsupervised_data/unsupervised_movie_data/movies.csv')
         # Header contents
         st.write('# Movie Recommender Engine')
         st.write('### EXPLORE Data Science Academy Unsupervised Predict')
@@ -113,57 +115,76 @@ def main():
             #                 We'll need to fix it!")
     # -------------------------------------------------------------------
 
+###########################################################################################
+################################ Solution Overview ########################################
+###########################################################################################
+
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
     if page_selection == "Solution Overview":
         st.title("Solution Overview")
         st.write("Describe your winning approach on this page")
+
+###########################################################################################
+################################ EDA ######################################################
+###########################################################################################
+
     # ------------- EDA -------------------------------------------
     if page_selection == "Exploratory Data Analysis":
-        st.title("Exploratory Data Analysis")
-        # st.write("Observations from the Data Exploration")
-        # Declare subpages
+        st.sidebar.markdown(open('resources/markdown/eda/eda_info.md').read(), unsafe_allow_html=True)
+        
         page_options_eda = ["User Interactions", "Movies", "Genres", "Directors"]
-        page_selection_eda = st.selectbox("Choose Area of Exploration", page_options_eda)
+        page_selection_eda = st.selectbox("Choose Page", page_options_eda)
         if page_selection_eda == "User Interactions":
+            st.sidebar.markdown(open('resources/markdown/eda/userint.md').read(), unsafe_allow_html=True)
+        
         # Most Active
             st.subheader("Most Active Users")
+            train_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/train.csv', index=None)
             top_user = st.checkbox('Include top user?',value=False)
+        
             ## include top user
             if top_user == True:
                 ratings = train_df
-            else:
-                ratings = train_df[train_df['userId']!=72315]
+            ratings = train_df[train_df['userId']!=72315]
+        
             ## choose top k
-            n = st.number_input('Enter number of users (1-20)',min_value=5, max_value=50, step = 5, value=10)
+            n = st.number_input('Enter number of users (1-50)',min_value=5, max_value=50, step = 5, value=10)
             ratings_plot = eda.user_ratings_count(ratings, n)
+            if n>=10:
+                plt.xticks(rotation=45)
+            plt.tight_layout()
             st.pyplot()
 
-            intro = open('resources/markdown/intro.md').read()
-            st.markdown(intro, unsafe_allow_html=True)##########
+            st.write("User 72315 has rated an extreme number of movies relative to other users. For EDA purposes, this user can be removed above to make interpretation easier.")
             
         # Ratings Distribution
             st.subheader('Ratings Distribution')
             eda.number_users_per_rating(ratings)
+            plt.tight_layout()
             st.pyplot()
-            st.write('Percentage of users per rating, most movies get a rating of 4.0.')
+            st.write(open('resources/markdown/eda/ratings_dist.md').read(), unsafe_allow_html=True)
 
         # Rating v number of ratings
             st.subheader('Ratings trends')
             eda.mean_ratings_scatter(ratings, color ='red')
             plt.title('Mean user ratings by number of ratings given')
+            plt.tight_layout()
             st.pyplot()
             st.write('It doesnot seem to be a relationship. As the number of ratings and how a user rates a movie do not show any correlation.')
             
             st.write('Q: Is there a relationship between the number of ratings a movie has and how highly it is rated?')
             eda.mean_ratings_scatter(ratings, column ='movieId')
             plt.title('Mean movie rating by number of ratings received')
+            plt.tight_layout()
             st.pyplot()
             st.write('This time we do see a relationship, The more ratings a movie has, the more highly it is likely to be rated. This confirms our intuitive understanding that the more highly recommended a movie is, the more likely it is to be well received by the user.')
 
-
         if page_selection_eda == "Movies":
-            st.write('best and worst movies by genre')
-            #ratings = train_df[train_df['userId']!=72315]
+            movies_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/movies.csv', index=None)
+            imdb_df = dl.load_dataframe('../unsupervised_data/unsupervised_movie_data/imdb_data.csv', index=None)
+        
+        
+            st.subheader('Best and Worst Movies by Genre')
             counts = st.number_input('Choose min ratings', min_value=0, max_value=15000, value = 10000, step=1000)
             ns= st.number_input('Choose n movies', min_value=5, max_value=20, value=10,step=5)
             eda.plot_ratings(count=counts, n=ns, color='red', best=True, method='mean')
@@ -224,20 +245,32 @@ def main():
             st.pyplot()
             st.write('The scores are almost evenly distributed with the exceptions of Documentaries, War, Drama, Musicals, and Romance and Thriller, Action, Sci-Fi, and Horror, which rate higher than average and below average respectively.')
 
+###########################################################################################
+################################ Introduction #############################################
+###########################################################################################
 
     if page_selection == "Introduction":
+        st.sidebar.markdown(open('resources/markdown/introduction/info.md').read(), unsafe_allow_html=True)
         info_pages = ["General Information", "Contributors"]
         info_page_selection = st.selectbox("", info_pages)
+        
         if info_page_selection == "General Information":
+            st.sidebar.markdown(open('resources/markdown/introduction/general_information/gen_conts.md').read(), unsafe_allow_html=True)
             st.image('resources/imgs/banner.png',use_column_width=True)
             st.markdown("<h1 style='text-align: center;'>The Flixters JHB_RM4</h1>", unsafe_allow_html=True)
-            st.markdown(open('resources/markdown/intro.md').read(), unsafe_allow_html=True)
+            st.markdown(open('resources/markdown/introduction/general_information/intro.md').read(), unsafe_allow_html=True)
+            
+            definitions = st.checkbox("Show definitions")
             see_raw = st.checkbox("Show data")
+            
+            if definitions:
+                st.write(open('resources/markdown/introduction/general_information/data_def.md', encoding='utf8').read(), unsafe_allow_html=True)
             if see_raw:
                 st.write(dl.load_dataframe('resources/data/ratings.csv', index='userId').head(10))
                 st.write(dl.load_dataframe('resources/data/movies.csv',index='movieId').head(10))
         
         if info_page_selection == "Contributors":
+            st.sidebar.markdown(open('resources/markdown/introduction/contrib.md').read(), unsafe_allow_html=True)
             st.markdown("<h1 style='text-align: center;'>Contributors</h1>", unsafe_allow_html=True)
             st.markdown("\n\n")
             
@@ -285,7 +318,6 @@ def main():
             
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
-
 
 if __name__ == '__main__':
     main()
