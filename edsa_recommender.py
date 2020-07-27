@@ -146,7 +146,8 @@ def main():
             ## include top user
             if top_user == True:
                 ratings = train_df
-            ratings = train_df[train_df['userId']!=72315]
+            else:
+                ratings = train_df[train_df['userId']!=72315]
 
             ## choose top k
             n = st.number_input('Select number of users (1-50)',min_value=5, max_value=50, step = 5, value=10)
