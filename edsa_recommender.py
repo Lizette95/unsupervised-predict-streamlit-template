@@ -326,7 +326,7 @@ def main():
 
             # Sizwe
             st.markdown("<h3 style='text-align: center;'>Sizwe Bhembe</h3>", unsafe_allow_html=True)
-            st.markdown("<p style='text-align: center;'>Team Member</p>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align: center;'>Notebook Assistant</p>", unsafe_allow_html=True)
             st.image('resources/imgs/Sizwe.jpg', width=120)
             st.markdown("<a href='https://www.linkedin.com/in/sizwe-bhembe-372880101' target='_blank'>LinkedIn</a>", unsafe_allow_html=True)
             st.markdown("<a href='https://github.com/sjbhembe' target='_blank'>GitHub</a>", unsafe_allow_html=True)
